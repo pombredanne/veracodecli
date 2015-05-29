@@ -11,6 +11,7 @@ def api apicall, params
 		return response.body
 end
 
+#NOTE: notice different api version (3.0 not 4.0)
 def get_detailed_report buildid
 	RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/3.0/detailedreport.do?build_id=#{buildid}"
 end
