@@ -7,7 +7,7 @@ def send apicall, params
 
 		puts ">> Making call to #{apicall}"
 
-		response = RestClient.get "https://#{USER}:#{PASS}@analysiscenter.veracode.com/api/4.0/#{apicall}", {:params => params}
+		response = RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/4.0/#{apicall}", {:params => params}   #{ENV['USER']}:#{ENV['PASS']}
 
 		return response.body
 end
@@ -39,7 +39,7 @@ def get_build_list appid
 end
 
 def get_detailed_report buildid
-	RestClient.get "https://#{USER}:#{PASS}@analysiscenter.veracode.com/api/3.0/detailedreport.do?build_id=#{buildid}"
+	RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/3.0/detailedreport.do?build_id=#{buildid}"
 end
 
 def xml_to_json string
@@ -50,6 +50,6 @@ end
 def save_to_file filename, data
 	data = xml_to_json data
 	f = File.open("testdata/#{filename}.json", 'w')
-	f.write data
+	f.write JSON.pretty_generate data
 	f.close
 end
