@@ -2,7 +2,7 @@ require_relative 'apicore/API_functions'
 
 appid = ARGV[0]
 
-build_list = get_build_list appid
+build_list = 'getbuildlist.do', {:app_id => appid}
 
 buildid = build_list.scan(/build_id="(\d{4,10})"/).last[0]
 

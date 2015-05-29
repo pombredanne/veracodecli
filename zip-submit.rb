@@ -4,7 +4,7 @@ archive_path = ARGV[0]
 
 appid = ARGV[1]
 
-applist = veracode_app_list
+applist = api 'getapplist.do', {}
 
 if applist.include? appid
   puts '>> Application found in Veracode'
@@ -14,12 +14,12 @@ end
 
 puts ">> Submitting #{appid}"
 
-upload_result = upload_files app_id, "#{archive_path}"
+upload_result = 'uploadfile.do' {:app_id => appid, :file => "@#{archive_path}"}
 
 save_to_file "#{appid}_upload_result", upload_result
 
-prescan_result = begin_prescan app_id
+submit_prescan_result = api 'beginprescan.do', {:app_id => appid}
 
-save_to_file "#{appid}_prescan_result", prescan_result
+save_to_file "#{appid}_submit_prescan_result", submit_prescan_result
 
 puts ">> Submit complete for #{appid}"
