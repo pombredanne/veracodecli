@@ -6,7 +6,7 @@ def api apicall, params
 
 		puts ">> Making call to #{apicall}"
 
-		response = RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/4.0/#{apicall}", {:params => params}   #{ENV['USER']}:#{ENV['PASS']}
+		response = RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/4.0/#{apicall}", {:params => params} 
 
 		return response.body
 end

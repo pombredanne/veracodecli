@@ -9,13 +9,13 @@ applist = api 'getapplist.do', {}
 if applist.include? appid
   puts '>> Application found in Veracode'
 else
-  raise 'VeracodeError: Project not found in veracode portfolio.'
+  raise 'VeracodeError: Application not found in veracode. Create an Application profile.'
 end
 
 puts ">> Submitting #{appid}"
 
 #NOTE: '@' in "@#{archive_path}" is temporary mitigation for bug in Veracode api
-upload_result = 'uploadfile.do' {:app_id => appid, :file => "@#{archive_path}"}
+upload_result = 'uploadfile.do', {:app_id => appid, :file => "@#{archive_path}"}
 
 save_to_file "#{appid}_upload_result", upload_result
 
