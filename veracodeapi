@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'commander/import'
+require '/home/isaiah/ci-scripts/apicore/API_functions'
+
+program :name, 'veracodeapi'
+program :version, '0.0.1'
+program :description, 'CLI for automating veracode api requests'
+
+command :scan do |c|
+  c.syntax = 'veracodeapi scan [app_id] [archive_path]'
+  c.description = 'Submits a scan request to Veracode.'
+  c.action do |args|
+    fail 'Specify app_id and path to code archive.' if args.count < 2
+    submit_scan args[0], args[1]
+  end
+end
+
+command :prescan do |c|
+  c.syntax = 'veracodeapi prescan [app_id]'
+  c.description = 'Downloads the prescan results from Veracode.'
+  c.action do |args|
+    fail 'Specify app_id.' if args.count < 1
+    get_prescan_results args.first
+  end
+end
+
+command :report do |c|
+  c.syntax = 'veracodeapi report [app_id]'
+  c.description = 'Downloads the final scan report from Veracode.'
+  c.action do |args|
+    fail 'Specify app_id.' if args.count < 1
+    get_scan_report args.first
+  end
+end

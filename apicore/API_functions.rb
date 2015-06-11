@@ -2,28 +2,59 @@ require 'json'
 require 'active_support/core_ext/hash'
 require 'rest-client'
 
-def api apicall, params
-
-		puts ">> Making call to #{apicall}"
-
-		response = RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/4.0/#{apicall}", {:params => params} 
-
-		return response.body
+def check_environment_login_variables
+	raise 'EnvironmentError: USER or PASS not set.' unless ENV['USER'] != nil && ENV['PASS'] != nil
 end
 
-#NOTE: notice different api version (3.0 not 4.0)
-def get_detailed_report buildid
-	RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/3.0/detailedreport.do?build_id=#{buildid}"
+def veracode_api_request(api_call, api_version: '4.0', **params)
+	check_environment_login_variables
+	puts ">> Making call to #{api_call}"
+	response = RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", {:params => params}
+	return response.body
 end
 
-def xml_to_json string
-  string = Hash.from_xml(string).to_json
-  string = JSON.parse(string)
+def xml_to_json(string)
+  json = Hash.from_xml(string).to_json
+  JSON.parse json
 end
 
-def save_to_file filename, data
+def write(data, to_file:)
 	data = xml_to_json data
-	f = File.open("testdata/#{filename}.json", 'w')
+	f = File.open "testdata/#{to_file}.json", 'w'
 	f.write JSON.pretty_generate data
 	f.close
+end
+
+def get_most_recent_build_id(using:)
+	build_list = veracode_api_request 'getbuildlist.do', app_id: using
+	write build_list, to_file: "#{using}_build_list"
+	build_id = build_list.scan(/build_id="(.*?)"/).last[0]
+end
+
+def validate_existance(of:)
+	app_list = veracode_api_request 'getapplist.do'
+	raise 'VeracodeError: Application not found in veracode. Create an Application profile.' unless app_list.include? of
+end
+
+def get_prescan_results(app_id)
+	results = veracode_api_request 'getprescanresults.do', app_id: app_id
+	puts "Fetched prescan results for #{app_id}"
+	write results, to_file: "#{app_id}_prescan_results"
+end
+
+def get_scan_report(app_id)
+	build_id = get_most_recent_build_id using: app_id
+	report = veracode_api_request 'detailedreport.do', api_version: '3.0', build_id: build_id
+	puts "Fetched report for #{app_id}, build #{build_id}"
+	write report, to_file: "#{app_id}_report"
+end
+
+def submit_scan(app_id, archive_path)
+	validate_existance of: appid
+	#NOTE: '@' in "@#{archive_path}" is temporary mitigation for bug in Veracode api
+	upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "@#{archive_path}"
+	write upload_result, to: "#{app_id}_upload_result"
+	prescan_submission_result = veracode_api_request 'beginprescan.do', app_id: app_id, auto_scan: 'true'
+	puts "Submit complete for #{app_id}"
+	write prescan_submission_result, to: "#{app_id}_prescan_submission_result"
 end

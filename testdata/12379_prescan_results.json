@@ -1,0 +1,24 @@
+{
+  "prescanresults": {
+    "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+    "xmlns": "https://analysiscenter.veracode.com/schema/2.0/prescanresults",
+    "xsi:schemaLocation": "https://analysiscenter.veracode.com/schema/2.0/prescanresults https://analysiscenter.veracode.com/resource/2.0/prescanresults.xsd",
+    "prescanresults_version": "1.2",
+    "account_id": "10042",
+    "app_id": "12379",
+    "build_id": "488114",
+    "module": {
+      "id": "491702327",
+      "name": "PHP files within Test1.zip",
+      "app_file_id": "2795921135",
+      "checksum": "79b93daa590c78b7fa91ddaf75c91dec",
+      "platform": "PHP / PHP / PHP_5",
+      "size": "2KB",
+      "status": "OK",
+      "has_fatal_errors": "false",
+      "issue": {
+        "details": "No supporting files or PDB files"
+      }
+    }
+  }
+}
