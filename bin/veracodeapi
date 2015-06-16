@@ -3,6 +3,8 @@
 require 'rubygems'
 require 'commander/import'
 require_relative '../apicore/API_functions'
+include VeracodeApiScan
+include VeracodeApiResults
 
 program :name, 'veracodeapi'
 program :version, '0.0.1'
@@ -11,9 +13,11 @@ program :description, 'CLI for automating veracode api requests'
 command :scan do |c|
   c.syntax = 'veracodeapi scan [app_id] [archive_path]'
   c.description = 'Submits a scan request to Veracode.'
-  c.action do |args|
-    fail 'Specify app_id and path to code archive.' if args.count < 2
-    submit_scan args[0], args[1]
+  c.option '--file FILE', String, 'Specifies path to archive.'
+  c.action do |args,options|
+    fail 'Specify app_id.' if args.count < 1
+    fail 'Requires path to code archive.' if options == nil
+    VeracodeApiScan.submit_scan args.first, options
   end
 end
 
@@ -22,7 +26,7 @@ command :get_prescan_results do |c|
   c.description = 'Downloads the prescan results from Veracode.'
   c.action do |args|
     fail 'Specify app_id.' if args.count < 1
-    get_prescan_results args.first
+    VeracodeApiResults.et_prescan_results args.first
   end
 end
 
@@ -31,6 +35,6 @@ command :get_report do |c|
   c.description = 'Downloads the final scan report from Veracode.'
   c.action do |args|
     fail 'Specify app_id.' if args.count < 1
-    get_scan_report args.first
+    VeracodeApiResults.get_scan_report args.first
   end
 end
