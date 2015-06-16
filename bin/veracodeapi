@@ -2,7 +2,7 @@
 
 require 'rubygems'
 require 'commander/import'
-require '/home/isaiah/ci-scripts/apicore/API_functions'
+require_relative '../apicore/API_functions'
 
 program :name, 'veracodeapi'
 program :version, '0.0.1'
@@ -17,8 +17,8 @@ command :scan do |c|
   end
 end
 
-command :prescan do |c|
-  c.syntax = 'veracodeapi prescan [app_id]'
+command :get_prescan_results do |c|
+  c.syntax = 'veracodeapi get-prescan-results [app_id]'
   c.description = 'Downloads the prescan results from Veracode.'
   c.action do |args|
     fail 'Specify app_id.' if args.count < 1
@@ -26,8 +26,8 @@ command :prescan do |c|
   end
 end
 
-command :report do |c|
-  c.syntax = 'veracodeapi report [app_id]'
+command :get_report do |c|
+  c.syntax = 'veracodeapi get-report [app_id]'
   c.description = 'Downloads the final scan report from Veracode.'
   c.action do |args|
     fail 'Specify app_id.' if args.count < 1

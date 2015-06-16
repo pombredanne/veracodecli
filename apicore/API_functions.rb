@@ -8,9 +8,9 @@ end
 
 def veracode_api_request(api_call, api_version: '4.0', **params)
 	check_environment_login_variables
-	puts ">> Making call to #{api_call}"
+	puts "Making call to #{api_call}"
 	response = RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", {:params => params}
-	return response.body
+	response.body
 end
 
 def xml_to_json(string)
@@ -51,7 +51,7 @@ end
 
 def submit_scan(app_id, archive_path)
 	validate_existance of: appid
-	#NOTE: '@' in "@#{archive_path}" is temporary mitigation for bug in Veracode api
+	#NOTE: '@' in "@#{archive_path}" below is temporary mitigation for bug in Veracode api
 	upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "@#{archive_path}"
 	write upload_result, to: "#{app_id}_upload_result"
 	prescan_submission_result = veracode_api_request 'beginprescan.do', app_id: app_id, auto_scan: 'true'
