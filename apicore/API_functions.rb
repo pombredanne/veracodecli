@@ -10,7 +10,7 @@ module VeracodeApiBase
 	def veracode_api_request(api_call, api_version: '4.0', **params)
 		check_environment_login_variables
 		puts "Making call to #{api_call}"
-		response = RestClient.get "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", {:params => params}
+		response = RestClient.get "https://#{ENV['USERNAME']}:#{ENV['PASSWORD']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", {:params => params}
 		return response.body
 	end
 
@@ -21,7 +21,7 @@ module VeracodeApiBase
 
 	def write(data, to_file:)
 		data = xml_to_json data
-		f = File.open "/home/isaiah/ci-scripts/testdata/#{to_file}.json", 'w'
+		f = File.open "/home/zaya/Documents/Work/ci-scripts/testdata/#{to_file}.json", 'w'
 		f.write JSON.pretty_generate data
 		f.close
 	end
