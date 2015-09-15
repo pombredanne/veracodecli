@@ -21,7 +21,7 @@ module VeracodeApiBase
 
 	def write(data, to_file:)
 		data = xml_to_json data
-		f = File.open "/home/zaya/Documents/Work/ci-scripts/testdata/#{to_file}.json", 'w'
+		f = File.open "../testdata/#{to_file}.json", 'w'
 		f.write JSON.pretty_generate data
 		f.close
 	end
