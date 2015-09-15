@@ -4,7 +4,7 @@ require 'rest-client'
 
 module VeracodeApiBase
 	def check_environment_login_variables
-		fail 'EnvironmentError: USER or PASS not set.' unless ENV['USER'] != nil && ENV['PASS'] != nil
+		fail 'EnvironmentError: USERNAME or PASSWORD not set.' unless ENV['USER'] != nil && ENV['PASS'] != nil
 	end
 
 	def veracode_api_request(api_call, api_version: '4.0', **params)
@@ -40,7 +40,7 @@ module VeracodeApiScan
 		validate_existance of: app_id
 		#NOTE: curl must be used here because of a bug in the Veracode api. Ruby cannot be used while this bug is present.
 		#NOTE: preferred code: upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "#{archive_path}"
-		upload_result = `curl --url "https://#{ENV['USER']}:#{ENV['PASS']}@analysiscenter.veracode.com/api/4.0/uploadfile.do" -F 'app_id=#{app_id}' -F 'file=@#{archive_path}'`
+		upload_result = `curl --url "https://#{ENV['USERNAME']}:#{ENV['PASSWORD']}@analysiscenter.veracode.com/api/4.0/uploadfile.do" -F 'app_id=#{app_id}' -F 'file=@#{archive_path}'`
 		write upload_result, to_file: "#{app_id}_upload_result"
 		prescan_submission_result = veracode_api_request 'beginprescan.do', app_id: app_id, auto_scan: 'true'
 		puts "Submit complete for #{app_id}"
