@@ -1,7 +1,5 @@
 # README #
 
-### Veracode API scripts ###
-
 ### Set Up ###
 
 * Clone repo to local machine
@@ -12,3 +10,6 @@
 * Eg: `/home/apiscripts/bin/veracodeapi scan 12345 code.zip`
 * `veracodeapi help` to see commands
 * `veracodeapi [command] -h` to see command syntax
+
+### Future Goals ###
+* This project will be expanded on as needed for my own automation needs
