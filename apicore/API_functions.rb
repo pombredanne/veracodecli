@@ -36,13 +36,13 @@ module VeracodeApiScan
 		app_list = veracode_api_request 'getapplist.do', include_user_info: 'true'
 		if app_list.include? "#{of}"
 			puts 'Record found, submitting'
-			return app_list.scan(/app_id=\\"(.+)\\" app_name=\\\"#{of}\\\"\//)
+			return app_list.scan(/app_id=\"(.+)\" app_name=\"#{of}\"/)
 		else
 			puts 'Record not found, creating one'
 			create_app_result = veracode_api_request 'createapp.do', app_name: of, description: "Static Scanning profile for #{of}.", business_criticality: 'High', business_unit: 'TELUS Digital', web_application: 'true', teams: "#{by}"
-			app_id = create_app_result.scan(/app_id=\\"(.+)\\" app_name=\\\"#{of}\\\"\//)
+			app_id = create_app_result.scan(/app_id=\"(.+)\" app_name=\"#{of}\"/)
 			puts "Record successfully created, app_id is #{app_id}"
-			return
+			return app_id
 		end
 	end
 
