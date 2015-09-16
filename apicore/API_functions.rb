@@ -31,20 +31,22 @@ module VeracodeApiScan
 
 	include VeracodeApiBase
 
-	def validate_existance(of:, using:)
+	def validate_existance(of:, by:)
 		puts "Validating records for #{using}"
-		app_list = veracode_api_request 'getapplist.do'
+		app_list = veracode_api_request 'getapplist.do', include_user_info: 'true'
 		if app_list.include? "#{using}"
 			puts 'Record found, submitting'
+			app_list.scan
 		else
 			puts 'Record not found, creating one'
-			veracode_api_request 'createapp.do', app_name: using, description: "Static Scanning profile for #{using}.", business_criticality: 'High', business_unit: 'TELUS Digital', web_application: 'true'
+			veracode_api_request 'createapp.do', app_name: using, description: "Static Scanning profile for #{using}.", business_criticality: 'High', business_unit: 'TELUS Digital', web_application: 'true', teams: "#{by}"
 			puts 'Record successfully created'
+			exit
 		end
 	end
 
-	def submit_scan(hostname, app_id, archive_path)
-		validate_existance of: app_id, using: hostname
+	def submit_scan(hostname, archive_path)
+		validate_existance of: hostname, by: ENV['USERNAME']
 		#NOTE: curl must be used here because of a bug in the Veracode api. Ruby cannot be used while this bug is present.
 		#NOTE: preferred code: upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "#{archive_path}"
 		upload_result = `curl --url "https://#{ENV['USERNAME']}:#{ENV['PASSWORD']}@analysiscenter.veracode.com/api/4.0/uploadfile.do" -F 'app_id=#{app_id}' -F 'file=@#{archive_path}'`
