@@ -11,12 +11,12 @@ program :version, '0.0.1'
 program :description, 'CLI for automating veracode api requests'
 
 command :scan do |c|
-  c.syntax = 'veracodeapi scan [app_id] [archive_path]'
+  c.syntax = 'veracodeapi scan [hostname] [app_id] [archive_path]'
   c.description = 'Submits a scan request to Veracode.'
   c.action do |args|
-    fail 'Specify app_id.' if args.first ==nil
-    fail 'Requires path to code archive.' if args[1] == nil
-    VeracodeApiScan.submit_scan args[0], args[1]
+    fail 'Specify app_id.' if args.first.nil?
+    fail 'Requires path to code archive.' if args[1].nil?
+    VeracodeApiScan.submit_scan args[0], args[1], args[2]
   end
 end
 
