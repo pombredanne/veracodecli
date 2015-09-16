@@ -40,8 +40,9 @@ module VeracodeApiScan
 		else
 			puts 'Record not found, creating one'
 			create_app_result = veracode_api_request 'createapp.do', app_name: of, description: "Static Scanning profile for #{of}.", business_criticality: 'High', business_unit: 'TELUS Digital', web_application: 'true', teams: "#{by}"
-			puts 'Record successfully created'
-			return create_app_result.scan(/app_id=\\"(.+)\\" app_name=\\\"#{of}\\\"\//)
+			app_id = create_app_result.scan(/app_id=\\"(.+)\\" app_name=\\\"#{of}\\\"\//)
+			puts "Record successfully created, app_id is #{app_id}"
+			return
 		end
 	end
 
