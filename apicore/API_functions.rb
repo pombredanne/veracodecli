@@ -36,11 +36,12 @@ module VeracodeApiScan
 		app_list = veracode_api_request 'getapplist.do', include_user_info: 'true'
 		if app_list.include? "#{of}"
 			puts 'Record found, submitting'
-			return app_list.scan(/app_id=\"(.+)\" app_name=\"#{of}\"/)
+			return app_list.scan(/app_id=\"(.+)\" app_name=\"#{of}\"/)[0][0]
 		else
 			puts 'Record not found, creating one'
-			create_app_result = veracode_api_request 'createapp.do', app_name: of, description: "Static Scanning profile for #{of}.", business_criticality: 'High', business_unit: 'TELUS Digital', web_application: 'true', teams: "#{by}"
-			app_id = create_app_result.scan(/app_id=\"(.+)\" app_name=\"#{of}\"/)
+			create_app_result = veracode_api_request 'createapp.do', app_name: of, description: "Static Scanning profile for #{of}.", business_criticality: 'High', business_unit: 'TELUS Digital', web_application: 'true', teams: "#{ENV['TEAM']}"
+			puts create_app_result
+			app_id = create_app_result.scan(/app_id=\"(.+)\" app_name=\"#{of}\"/)[0][0]
 			puts "Record successfully created, app_id is #{app_id}"
 			return app_id
 		end
@@ -49,7 +50,7 @@ module VeracodeApiScan
 	def submit_scan(hostname, archive_path)
 		app_id = validate_existance of: hostname, by: ENV['USERNAME']
 		#NOTE: curl must be used here because of a bug in the Veracode api. Ruby cannot be used while this bug is present.
-		#NOTE: preferred code: upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "#{archive_path}"
+		#NOTE: preferred code:upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "#{archive_path}"
 		upload_result = `curl --url "https://#{ENV['USERNAME']}:#{ENV['PASSWORD']}@analysiscenter.veracode.com/api/4.0/uploadfile.do" -F 'app_id=#{app_id}' -F 'file=@#{archive_path}'`
 		puts upload_result
 		#write upload_result, to_file: "#{app_id}_upload_result"
