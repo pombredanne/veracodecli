@@ -3,7 +3,7 @@
 ### Set Up ###
 
 * Clone repo to local machine
-* Dependencies: json, activesupport, rest-client, and commander gems
+* Dependencies: Ruby 2.x+ json, activesupport, rest-client, and commander gems
 * Set `VERACODE_USERNAME`, `VERACODE_PASSWORD` and `VERACODE_TEAM` environment variables to API user credentials + Team Name for your Veracode account
 * Add /path/to/clone/veracodecli/bin to system path
 * To run a scan use `veracodecli scan [app_name] [archivepath]`
