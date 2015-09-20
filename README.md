@@ -1,15 +1,33 @@
-# README #
+# veracodecli
 
-### Set Up ###
+A ruby cli gem for interacting with the veracode API
 
-* Clone repo to local machine
-* Dependencies: Ruby 2.0+, json, activesupport, rest-client, and commander gems
-* Set `VERACODE_USERNAME`, `VERACODE_PASSWORD` and `VERACODE_TEAM` environment variables to API user credentials + Team Name for your Veracode account
-* Add /path/to/clone/veracodecli/bin to system path
-* To run a scan use `veracodecli scan [app_name] [archivepath]`
-* Eg: `/home/apiscripts/bin/veracodecli scan MyApplication MyApplicationCode.zip`
-* `veracodecli help` to see commands
-* `veracodecli [command] -h` to see command syntax
+## Table of contents
 
-### Future Goals ###
-* This project will be expanded on as needed for my/my team's automation needs
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+- [Contributors](#contributors)
+
+## Installation
+
+```
+gem install veracodecli
+```
+
+## Usage
+
+1. Set `VERACODE_USERNAME` and `VERACODE_PASSWORD` environment variables to your API credentials for the veracode API.
+2. To run a scan use `veracodecli scan _app\_name_ _archive\_path_
+
+- `veracodecli help` to see commands
+- `veracodecli [command] -h` to see command syntax
+
+## License
+
+[MIT](https://tldrlegal.com/license/mit-license)
+
+## Contributors
+
+* Isaiah Thiessen | [email](mailto:isaiah.thiessen@telus.com)
+* Ben Visser | [email](mailto:benjamin.visser@telus.com)

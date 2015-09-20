@@ -2,11 +2,9 @@
 
 require 'rubygems'
 require 'commander/import'
-require_relative '../apicore/API_functions'
-include VeracodeApiScan
-include VeracodeApiResults
+require 'veracodecli'
 
-program :name, 'veracodeapi'
+program :name, 'veracodecli'
 program :version, '0.0.1'
 program :description, 'CLI for automating veracode api requests'
 
