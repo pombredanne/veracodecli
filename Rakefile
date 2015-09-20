@@ -15,12 +15,16 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
   gem.name = "veracodecli"
-  gem.homepage = "http://github.com/noqcks/veracodecli"
+  gem.homepage = "http://github.com/isand3r/veracodecli"
   gem.license = "MIT"
-  gem.summary = %Q{Ruby based CLI for accessing veracode's api.}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "theodore.r.visser@gmail.com"
-  gem.authors = ["Ben Visser"]
+  gem.summary = %Q{Ruby based CLI for accessing veracode's api}
+  gem.description = %Q{Ruby based CLI for accessing veracode's api}
+  gem.email = "isaiah.thiessen@telus.com"
+  gem.authors = ["isaiah thiessen"]
+  gem.files = ["lib/veracodecli/api.rb", "lib/veracodecli", "bin/veracodecli"]
+  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.executables   = ['veracodecli']
+  gem.require_paths = ['lib', 'lib/veracodecli']
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
