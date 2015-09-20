@@ -12,7 +12,7 @@ command :scan do |c|
   c.syntax = 'veracodeapi scan [hostname] [archive_path]'
   c.description = 'Submits a scan request to Veracode.'
   c.action do |args|
-    fail 'Specify app_id.' if args.first.nil?
+    fail 'Specify application Name.' if args.first.nil?
     fail 'Requires path to code archive.' if args[1].nil?
     VeracodeApiScan.submit_scan args[0], args[1]
   end
