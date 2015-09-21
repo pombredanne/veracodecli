@@ -4,13 +4,13 @@ require 'rest-client'
 
 module VeracodeApiBase
   def check_environment_login_variables
-    fail 'EnvironmentError: VERACODE_USERNAME or VERACODE_PASSWORD not set.' unless ENV['VERACODE_USERNAME'] != nil && ENV['VERACODE_PASSWORD'] != nil
+    fail 'EnvironmentError: VERACODE_USERNAME or VERACODE_PASSWORD not set.' unless !ENV['VERACODE_USERNAME'].nil? && !ENV['VERACODE_PASSWORD'].nil?
   end
 
   def veracode_api_request(api_call, api_version: '4.0', **params)
     check_environment_login_variables
     puts "Making call to #{api_call}"
-    response = RestClient.get "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", {params:params}
+    response = RestClient.get "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
     response.body
   end
 
@@ -28,7 +28,6 @@ module VeracodeApiBase
 end
 
 module VeracodeApiScan
-
   include VeracodeApiBase
 
   def validate_existance(of:, by:)
@@ -48,26 +47,25 @@ module VeracodeApiScan
 
   def submit_scan(hostname, archive_path)
     app_id = validate_existance of: hostname, by: ENV['VERACODE_USERNAME']
-    #NOTE: curl must be used here because of a bug in the Veracode api. Ruby cannot be used while this bug is present.
-    #NOTE: preferred code: upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "#{archive_path}"
+    # NOTE: curl must be used here because of a bug in the Veracode api. Ruby cannot be used while this bug is present.
+    # NOTE: preferred code: upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "#{archive_path}"
     upload_result = `curl --url "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/4.0/uploadfile.do" -F 'app_id=#{app_id}' -F 'file=@#{archive_path}'`
     puts upload_result
-    #write upload_result, to_file: "#{app_id}_upload_result"
+    # write upload_result, to_file: "#{app_id}_upload_result"
     prescan_submission_result = veracode_api_request 'beginprescan.do', app_id: app_id, auto_scan: 'true'
     puts prescan_submission_result
     puts "Submit complete for #{app_id}"
-    #write prescan_submission_result, to_file: "#{app_id}_prescan_submission_result"
+    # write prescan_submission_result, to_file: "#{app_id}_prescan_submission_result"
   end
 end
 
 module VeracodeApiResults
-
   include VeracodeApiBase
 
   def get_most_recent_build_id(using:)
     build_list = veracode_api_request 'getbuildlist.do', app_id: using
     write build_list, to_file: "#{using}_build_list"
-    build_id = build_list.scan(/build_id="(.*?)"/).last[0]
+    build_list.scan(/build_id="(.*?)"/).last[0]
   end
 
   def get_prescan_results(app_id)
