@@ -21,7 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{Ruby based CLI for accessing veracode's api}
   gem.email = "isaiah.thiessen@telus.com"
   gem.authors = ["isaiah thiessen"]
-  gem.files = ["lib/veracodecli/api.rb", "lib/veracodecli", "bin/veracodecli"]
+  gem.files = ["lib/veracodecli/api.rb", "lib/veracodecli.rb"]
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.executables   = ['veracodecli']
   gem.require_paths = ['lib', 'lib/veracodecli']
