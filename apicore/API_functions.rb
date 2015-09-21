@@ -4,7 +4,7 @@ require 'rest-client'
 
 module VeracodeApiBase
 	def check_environment_login_variables
-		if ENV['VERACODE_USERNAME'].nil? || ENV['VERACODE_PASSWORD'].nil? || ENV['VERACODE_TEAM'].nil? then fail 'EnvironmentError: VERACODE_USERNAME,VERACODE_PASSWORD or VERACODE_TEAM not set.'
+		if ENV['VERACODE_USERNAME'].nil? || ENV['VERACODE_PASSWORD'].nil? || ENV['VERACODE_TEAM'].nil? then fail 'EnvironmentError: VERACODE_USERNAME,VERACODE_PASSWORD or VERACODE_TEAM not set.' end
 	end
 
 	def veracode_api_request(api_call, api_version: '4.0', **params)
