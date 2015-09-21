@@ -6,6 +6,7 @@ A ruby cli gem for interacting with the veracode API
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [How To Contribute](#how-to-contribute)
 - [License](#license)
 - [Contributors](#contributors)
 
@@ -22,6 +23,15 @@ gem install veracodecli
 
 - `veracodecli help` to see commands
 - `veracodecli [command] -h` to see command syntax
+
+## How To Contribute
+This gem uses [jeweler](https://github.com/technicalpickles/jeweler) for development. Read about relevant commands at that repo.
+
+* Fork the project.
+* Start a feature/bugfix branch.
+* Use `rake install` in the main directory to install the gem on your system.
+* Commit and push until you are happy with your contribution.
+* Make a pull request to this repo.
 
 ## License
 
