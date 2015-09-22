@@ -19,19 +19,28 @@ command :scan do |c|
 end
 
 command :get_prescan_results do |c|
-  c.syntax = 'veracodeapi get-prescan-results [app_id]'
+  c.syntax = 'veracodecli get-prescan-results [app_id]'
   c.description = 'Downloads the prescan results from Veracode.'
   c.action do |args|
-    fail 'Specify app_id.' if args.count < 1
-    VeracodeApiResults.et_prescan_results args.first
+    fail 'Specify app_id.' if args.first.nil?
+    VeracodeApiResults.get_prescan_results args.first
   end
 end
 
+command :get_status do |c|
+  c.syntax = 'veracodecli get-status [app_id]'
+  c.description = 'Gets scan state of current app build from Veracode.'
+  c.action do |args|
+    fail 'Specify app_id.' if args.first.nil?
+    VeracodeApiResults.get_build_status args.first
+  end  
+end
+
 command :get_report do |c|
-  c.syntax = 'veracodeapi get-report [app_id]'
+  c.syntax = 'veracodecli get-report [app_id]'
   c.description = 'Downloads the final scan report from Veracode.'
   c.action do |args|
-    fail 'Specify app_id.' if args.count < 1
+    fail 'Specify app_id.' if args.first.nil?
     VeracodeApiResults.get_scan_report args.first
   end
 end
