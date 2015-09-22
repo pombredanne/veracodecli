@@ -2,7 +2,6 @@
 
 require 'rubygems'
 require 'commander/import'
-require 'veracodecli'
 
 program :name, 'veracodecli'
 program :version, '0.0.1'
@@ -33,7 +32,7 @@ command :get_status do |c|
   c.action do |args|
     fail 'Specify app_id.' if args.first.nil?
     VeracodeApiResults.get_build_status args.first
-  end  
+  end
 end
 
 command :get_report do |c|
