@@ -14,4 +14,5 @@ group :development do
   gem "simplecov", ">= 0"
   gem "reek", "~> 1.2.8"
   gem "roodi", "~> 2.1.0"
+  gem "rubocop", "~> 0.32.1"
 end
