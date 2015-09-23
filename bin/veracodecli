@@ -8,41 +8,43 @@ Commander.configure do
   program :version, '0.1.0'
   program :description, 'CLI for automating veracode api requests'
   program :help, 'Author', 'Isaiah Thiessen <isaiah.thiessen@telus.com>'
-end
 
-command :scan do |c|
-  c.syntax = 'veracodecli scan [hostname] [archive_path]'
-  c.description = 'Submits a scan request to Veracode.'
-  c.action do |args|
-    fail 'Specify application Name.' if args.first.nil?
-    fail 'Requires path to code archive.' if args[1].nil?
-    VeracodeApiScan.submit_scan args[0], args[1]
-  end
-end
 
-command :get_prescan_results do |c|
-  c.syntax = 'veracodecli get-prescan-results [app_id]'
-  c.description = 'Downloads the prescan results from Veracode.'
-  c.action do |args|
-    fail 'Specify app_id.' if args.first.nil?
-    VeracodeApiResults.get_prescan_results args.first
+  command :scan do |c|
+    c.syntax = 'veracodecli scan [hostname] [archive_path]'
+    c.description = 'Submits a scan request to Veracode.'
+    c.action do |args|
+      fail 'Specify application Name.' if args.first.nil?
+      fail 'Specify path to code archive.' if args[1].nil?
+      VeracodeApiScan.submit_scan args[0], args[1]
+    end
   end
-end
 
-command :get_status do |c|
-  c.syntax = 'veracodecli get-status [app_id]'
-  c.description = 'Gets scan state of current build from Veracode.'
-  c.action do |args|
-    fail 'Specify app_id.' if args.first.nil?
-    VeracodeApiResults.get_build_status args.first
+  command :get_prescan_results do |c|
+    c.syntax = 'veracodecli get-prescan-results [app_id]'
+    c.description = 'Downloads the prescan results from Veracode.'
+    c.action do |args|
+      fail 'Specify app_id.' if args.first.nil?
+      VeracodeApiResults.get_prescan_results args.first
+    end
   end
-end
 
-command :get_report do |c|
-  c.syntax = 'veracodecli get-report [app_id]'
-  c.description = 'Downloads the final scan report from Veracode.'
-  c.action do |args|
-    fail 'Specify app_id.' if args.first.nil?
-    VeracodeApiResults.get_scan_report args.first
+  command :get_status do |c|
+    c.syntax = 'veracodecli get-status [app_id]'
+    c.description = 'Gets scan state of current build from Veracode.'
+    c.action do |args|
+      fail 'Specify app_id.' if args.first.nil?
+      VeracodeApiResults.get_build_status args.first
+    end
   end
+
+  command :get_report do |c|
+    c.syntax = 'veracodecli get-report [app_id]'
+    c.description = 'Downloads the final scan report from Veracode.'
+    c.action do |args|
+      fail 'Specify app_id.' if args.first.nil?
+      VeracodeApiResults.get_scan_report args.first
+    end
+  end
+
 end
