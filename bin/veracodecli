@@ -8,6 +8,7 @@ Commander.configure do
   program :version, '0.1.0'
   program :description, 'CLI for automating veracode api requests'
   program :help, 'Author', 'Isaiah Thiessen <isaiah.thiessen@telus.com>'
+end
 
 command :scan do |c|
   c.syntax = 'veracodecli scan [hostname] [archive_path]'
@@ -17,7 +18,7 @@ command :scan do |c|
     fail 'Requires path to code archive.' if args[1].nil?
     VeracodeApiScan.submit_scan args[0], args[1]
   end
-end  
+end
 
 command :get_prescan_results do |c|
   c.syntax = 'veracodecli get-prescan-results [app_id]'
@@ -35,6 +36,7 @@ command :get_status do |c|
     fail 'Specify app_id.' if args.first.nil?
     VeracodeApiResults.get_build_status args.first
   end
+end
 
 command :get_report do |c|
   c.syntax = 'veracodecli get-report [app_id]'
