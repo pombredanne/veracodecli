@@ -2,13 +2,16 @@
 
 require 'rubygems'
 require 'commander/import'
+require_relative '../lib/veracodecli/api.rb'
+include VeracodeApiScan
+include VeracodeApiResults
 
 program :name, 'veracodecli'
 program :version, '0.0.1'
 program :description, 'CLI for automating veracode api requests'
 
 command :scan do |c|
-  c.syntax = 'veracodeapi scan [hostname] [archive_path]'
+  c.syntax = 'veracodecli scan [hostname] [archive_path]'
   c.description = 'Submits a scan request to Veracode.'
   c.action do |args|
     fail 'Specify application Name.' if args.first.nil?
@@ -28,7 +31,7 @@ end
 
 command :get_status do |c|
   c.syntax = 'veracodecli get-status [app_id]'
-  c.description = 'Gets scan state of current app build from Veracode.'
+  c.description = 'Gets scan state of current build from Veracode.'
   c.action do |args|
     fail 'Specify app_id.' if args.first.nil?
     VeracodeApiResults.get_build_status args.first

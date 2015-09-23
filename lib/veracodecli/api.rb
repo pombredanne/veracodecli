@@ -55,6 +55,7 @@ module VeracodeApiScan
     prescan_submission_result = veracode_api_request 'beginprescan.do', app_id: app_id, auto_scan: 'true'
     puts prescan_submission_result
     puts "Submit complete for #{app_id}"
+    # `$VERACODE_SCAN_RESULT_CHECK_QUEUE=$VERACODE_SCAN_RESULT_CHECK_QUEUE:#{app_id}`
     # write prescan_submission_result, to_file: "#{app_id}_prescan_submission_result"
   end
 end
