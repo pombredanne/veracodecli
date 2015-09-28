@@ -9,7 +9,7 @@ module VeracodeApiBase
 
   def veracode_api_request(api_call, api_version: '4.0', **params)
     check_environment_login_variables
-    puts "Making call to #{api_call}"
+    # puts "Making call to #{api_call}"
     response = RestClient.get "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
     response.body
   end
@@ -55,7 +55,7 @@ module VeracodeApiScan
     prescan_submission_result = veracode_api_request 'beginprescan.do', app_id: app_id, auto_scan: 'true'
     puts prescan_submission_result
     puts "Submit complete for #{app_id}"
-    # `$VERACODE_SCAN_RESULT_CHECK_QUEUE=$VERACODE_SCAN_RESULT_CHECK_QUEUE:#{app_id}`
+    # File.write 'VERACODE_SCAN_RESULT_CHECK_QUEUE', app_id
     # write prescan_submission_result, to_file: "#{app_id}_prescan_submission_result"
   end
 end
@@ -73,7 +73,7 @@ module VeracodeApiResults
     build_info = veracode_api_request 'getbuildinfo.do', app_id: app_id
     build_id = build_info.scan(/build_id="(.*?)"/)[0][0]
     build_status = build_info.scan(/status="(.*?)"/).last[0]
-    return {app_id:app_id, build_id:build_id, build_status:build_status}
+    puts build_status
   end
 
   def get_prescan_results(app_id)
