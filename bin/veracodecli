@@ -33,7 +33,7 @@ Commander.configure do
 
   command :get_status do |c|
     c.syntax = 'veracodecli get-status [app_id]'
-    c.description = 'Gets scan state of current build from Veracode.'
+    c.description = 'Gets scan state from Veracode.'
     c.action do |args|
       fail 'Specify app_id.' if args.first.nil?
       VeracodeApiResults.get_build_status args.first
