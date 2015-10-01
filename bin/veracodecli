@@ -13,7 +13,7 @@ Commander.configure do
 
 
   command :scan do |c|
-    c.syntax = 'veracodecli scan [hostname] [archive_path]'
+    c.syntax = 'veracodecli scan [app_name] [archive_path]'
     c.description = 'Submits a scan request to Veracode.'
     c.action do |args|
       fail 'Specify application Name.' if args.first.nil?
