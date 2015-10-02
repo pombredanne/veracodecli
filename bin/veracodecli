@@ -11,7 +11,6 @@ Commander.configure do
   program :description, 'CLI for automating veracode api requests'
   program :help, 'Author', 'Isaiah Thiessen <isaiah.thiessen@telus.com>'
 
-
   command :scan do |c|
     c.syntax = 'veracodecli scan [app_name] [archive_path]'
     c.description = 'Submits a scan request to Veracode.'
