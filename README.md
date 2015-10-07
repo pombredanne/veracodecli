@@ -33,10 +33,10 @@ This gem uses [jeweler](https://github.com/technicalpickles/jeweler) for develop
 * Commit and push until you are happy with your contribution.
 * Make a pull request to this repo.
 
-##Roadmap
+## Roadmap
 Ideas for future development.
 
-*Config file: Make this cli scanner/tool agnostic. Should work with rest api services from other tools
+* Config file: Make this cli scanner/tool agnostic. Should work with rest api services from other tools
 
 ## License
 
