@@ -35,6 +35,7 @@ This gem uses [jeweler](https://github.com/technicalpickles/jeweler) for develop
 
 ##Roadmap
 Ideas for future development.
+
 *Config file: Make this cli scanner/tool agnostic. Should work with rest api services from other tools
 
 ## License
