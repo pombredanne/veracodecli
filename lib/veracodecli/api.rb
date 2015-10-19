@@ -62,6 +62,7 @@ module VeracodeApiResults
   def get_prescan_results(app_id)
     results = veracode_api_request 'getprescanresults.do', app_id: app_id
     puts "Fetched prescan results for #{app_id}"
+    puts results
   end
 
   def get_scan_report(app_id)
