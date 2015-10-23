@@ -32,8 +32,8 @@ module VeracodeApiScan
     end
   end
 
-  def submit_scan(hostname, archive_path)
-    app_id = validate_existance of: hostname
+  def submit_scan(app_name, archive_path)
+    app_id = validate_existance of: app_name
     # NOTE: curl must be used here because of a bug in the Veracode api. rest-client cannot be used while this bug is present.
     # NOTE: preferred code: upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "#{archive_path}"
     upload_result = `curl --url "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/4.0/uploadfile.do" -F 'app_id=#{app_id}' -F 'file=@#{archive_path}'`

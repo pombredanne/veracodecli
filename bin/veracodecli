@@ -4,6 +4,7 @@ require 'commander'
 require 'veracodecli'
 include VeracodeApiResults
 include VeracodeApiScan
+include VeracodeApiBase
 
 Commander.configure do
   program :name, 'veracodecli'
