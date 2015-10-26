@@ -10,7 +10,6 @@ module VeracodeApiBase
   def veracode_api_request(api_call, api_version: '4.0', **params)
     check_environment_login_variables
     response = RestClient.get "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
-    response.body
   end
 end
 
@@ -21,11 +20,12 @@ module VeracodeApiScan
     app_list = veracode_api_request 'getapplist.do', include_user_info: 'true'
     scan = app_list.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)
     if !scan.nil? then app_id = scan[0][0] else app_id = nil end
+    app_id
   end
 
   def create_app_profile(app_name, business_criticality, business_unit, teams)
     create_app_response = veracode_api_request 'createapp.do', app_name: app_name, business_criticality: business_criticality, business_unit: business_unit, teams: teams
-    app_id = create_app_response.scan(/app_id=\"(.+)\" app_name=\"#{of}\"/)[0][0]
+    app_id = create_app_response.body.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)[0][0]
   end
 
   def upload_file(app_id, archive_path)
@@ -44,24 +44,27 @@ module VeracodeApiResults
 
   def get_most_recent_build_id(app_id)
     build_list = veracode_api_request 'getbuildlist.do', app_id: app_id
-    build_list.scan(/build_id="(.*?)"/).last[0]
+    build_list.body.scan(/build_id="(.*?)"/).last[0]
   end
 
   def get_build_status(app_id)
     build_info = veracode_api_request 'getbuildinfo.do', app_id: app_id
-    build_id = build_info.scan(/build_id="(.*?)"/)[0][0]
-    build_status = build_info.scan(/status="(.*?)"/).last[0]
+    build_id = build_info.body.scan(/build_id="(.*?)"/)[0][0]
+    build_status = build_info.body.scan(/status="(.*?)"/).last[0]
     puts build_status
+    build_status
   end
 
   def get_prescan_results(app_id)
     results = veracode_api_request 'getprescanresults.do', app_id: app_id
     puts "Fetched prescan results for #{app_id}"
-    puts results
+    puts results.body
+    results
   end
 
-  def get_scan_report(app_id)
+  def get_scan_report(build_id)
     report = veracode_api_request 'detailedreport.do', api_version: '3.0', build_id: build_id
+    report = report.body
   end
 end
 
