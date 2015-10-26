@@ -19,7 +19,8 @@ module VeracodeApiScan
 
   def get_app_id(app_name)
     app_list = veracode_api_request 'getapplist.do', include_user_info: 'true'
-    app_id = app_list.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)[0][0]
+    scan = app_list.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)
+    if !scan.nil? then app_id = scan[0][0] else app_id = nil end
   end
 
   def create_app_profile(app_name, business_criticality, business_unit, teams)

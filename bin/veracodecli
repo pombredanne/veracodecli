@@ -14,19 +14,22 @@ Commander.configure do
   program :help, 'Author', 'Isaiah Thiessen <isaiah.thiessen@telus.com>'
 
   command :scan do |c|
-    c.syntax = 'veracodecli scan [app_name] [repo] --opt'
+    c.syntax = 'veracodecli scan [app_name] [repo] --option [option]'
     c.description = 'Submits a scan to Veracode.'
     c.option '--business_unit NAME', String, 'Business Unit Name'
     c.option '--team NAME', String, 'Team Name'
-    c.option '--business_criticality', String, 'Application business criticality '
+    c.option '--business_criticality', String, 'Application business criticality'
     c.action do |args,options|
       fail 'Specify application Name.' if args.first.nil?
       fail 'Specify repo location.' if args[1].nil?
       # VeracodeApiScan.submit_scan args[0], args[1]
       options.default :business_criticality => 'High'
       options.default :business_unit => 'TELUS Digital'
-      `git clone #{args[1]} sast_clone; cd sast_clone; git archive --format=tar -o sast_upload.tar master`
+      dir = "/home/#{ENV['USER']}/veracodecli_data/sast_clone"
+      if !Dir.exists?(dir) then `git clone #{args[1]} #{dir}` end
+      if Dir.exists?(dir) then `cd #{dir}; git pull; git archive --format=tar -o sast_upload.tar master` else fail 'Repository not found' end
       VeracodeApiMacros.submit_scan_macro args[0], options.business_criticality, options.business_unit, options.team, 'sast_clone/sast_upload.tar'
+      `cd #{dir}; rm -r sast_upload.tar`
     end
   end
 
