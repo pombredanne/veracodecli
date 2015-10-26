@@ -13,7 +13,7 @@ class TestVeracodecli < Test::Unit::TestCase
     end
 
     should 'Return HTTP 401' do
-      assert_equal response.code, veracode_api_request('getapplist.do', '')
+      assert_kind_of String, veracode_api_request('getapplist.do')
     end
 
   end

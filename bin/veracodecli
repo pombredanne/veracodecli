@@ -5,20 +5,28 @@ require 'veracodecli'
 include VeracodeApiResults
 include VeracodeApiScan
 include VeracodeApiBase
+include VeracodeApiMacros
 
 Commander.configure do
   program :name, 'veracodecli'
-  program :version, '0.1.0'
+  program :version, '0.1.2'
   program :description, 'CLI for automating veracode api requests'
   program :help, 'Author', 'Isaiah Thiessen <isaiah.thiessen@telus.com>'
 
   command :scan do |c|
-    c.syntax = 'veracodecli scan [app_name] [archive_path]'
-    c.description = 'Submits a scan request to Veracode.'
-    c.action do |args|
+    c.syntax = 'veracodecli scan [app_name] [repo] --opt'
+    c.description = 'Submits a scan to Veracode.'
+    c.option '--business_unit NAME', String, 'Business Unit Name'
+    c.option '--team NAME', String, 'Team Name'
+    c.option '--business_criticality', String, 'Application business criticality '
+    c.action do |args,options|
       fail 'Specify application Name.' if args.first.nil?
-      fail 'Specify path to code archive.' if args[1].nil?
-      submit_scan args[0], args[1]
+      fail 'Specify repo location.' if args[1].nil?
+      # VeracodeApiScan.submit_scan args[0], args[1]
+      options.default :business_criticality => 'High'
+      options.default :business_unit => 'TELUS Digital'
+      `git clone #{args[1]} sast_clone; cd sast_clone; git archive --format=tar -o sast_upload.tar master`
+      VeracodeApiMacros.submit_scan_macro args[0], options.business_criticality, options.business_unit, options.team, 'sast_clone/sast_upload.tar'
     end
   end
 
@@ -41,11 +49,12 @@ Commander.configure do
   end
 
   command :get_report do |c|
-    c.syntax = 'veracodecli get-report [app_id]'
+    c.syntax = 'veracodecli get-report [app_name]'
     c.description = 'Downloads the final scan report from Veracode.'
     c.action do |args|
-      fail 'Specify app_id.' if args.first.nil?
-      VeracodeApiResults.get_scan_report args.first
+      fail 'Specify app_name.' if args.first.nil?
+      #VeracodeApiResults.get_scan_report args.first
+      VeracodeApiMacros.get_scan_report args.first
     end
   end
 
