@@ -100,7 +100,8 @@ module VeracodeApiMacros
   def get_pdf_macro(app_name)
     app_id = get_app_id app_name
     build_id = get_most_recent_build_id app_id
-    report = get_scan_report build_id
+    report = get_scan_report_pdf build_id
+    puts report
   end
 
 end
