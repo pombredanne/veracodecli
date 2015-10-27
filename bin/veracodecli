@@ -56,9 +56,16 @@ Commander.configure do
     c.description = 'Downloads the final scan report from Veracode.'
     c.action do |args|
       fail 'Specify app_name.' if args.first.nil?
-      #VeracodeApiResults.get_scan_report args.first
-      VeracodeApiMacros.get_scan_report args.first
+      VeracodeApiMacros.get_report_macro args.first
     end
   end
 
+  command :get_pdf_report do |c|
+    c.syntax = 'veracodecli get-pdf [app_name]'
+    c.description = 'Downloads the final scan report in pdf format.'
+    c.action do |args|
+      fail 'Specify app_name.' if args.first.nil?
+      VeracodeApiMacros.get_pdf_macro args.first
+    end
+  end
 end

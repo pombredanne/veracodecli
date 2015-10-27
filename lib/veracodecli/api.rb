@@ -71,6 +71,11 @@ module VeracodeApiResults
     report = veracode_api_request 'detailedreport.do', api_version: '3.0', build_id: build_id
     report = report.body
   end
+
+  def get_scan_report_pdf(build_id)
+    report = veracode_api_request 'detailedreportpdf.do', api_version: '3.0', build_id: build_id
+    report = report.body
+  end
 end
 
 module VeracodeApiMacros
@@ -89,7 +94,13 @@ module VeracodeApiMacros
   def get_report_macro(app_name)
     app_id = get_app_id app_name
     build_id = get_most_recent_build_id app_id
-    report = get_scan_report app_id
+    report = get_scan_report build_id
+  end
+
+  def get_pdf_macro(app_name)
+    app_id = get_app_id app_name
+    build_id = get_most_recent_build_id app_id
+    report = get_scan_report build_id
   end
 
 end
