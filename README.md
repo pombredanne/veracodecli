@@ -18,7 +18,7 @@ gem install veracodecli
 
 ## Usage
 
-1. Set `VERACODE_USERNAME`, `VERACODE_PASSWORD`, and `VERACODE_TEAM` environment variables to your API credentials for the veracode API.
+1. Set `VERACODE_USERNAME` and `VERACODE_PASSWORD` environment variables to your API credentials for the veracode API.
 2. To run a scan use `veracodecli scan _app\_name_ _archive\_path_
 
 - `veracodecli help` to see commands
