@@ -8,8 +8,9 @@ class TestVeracodecli < Test::Unit::TestCase
   context 'VeracodeApi' do
 
     setup do
-      ENV['VERACODE_USERNAME'] = 'telusdigitalapi'
-      ENV['VERACODE_PASSWORD'] = 'OSJ939q4'
+      ENV['VERACODE_USERNAME'] = ''
+      ENV['VERACODE_PASSWORD'] = ''
+      @test_file_location = '' # a .tar or .zip archive path
     end
 
     should 'Return existing application profile ID' do
@@ -24,9 +25,13 @@ class TestVeracodecli < Test::Unit::TestCase
       assert_equal 200, veracode_api_request('beginprescan.do', app_id:'12379').code
     end
 
-    # should 'Return XML response for uploadfile.do' do
-    #   assert_boolean upload_file('12379', '/home/zaya/Documents/test.php.tar').include?('Uploaded')
-    # end
+    should 'Return Response Object' do
+      assert_kind_of RestClient::Response, veracode_api_request('getapplist.do')
+    end
+
+    should 'Return XML response for uploadfile.do' do
+      assert_boolean upload_file('12379', @test_file_location).include?('Uploaded')
+    end
 
     should 'Return HTTP from get_prescan_results function' do
       assert_equal 200, get_prescan_results('12379').code

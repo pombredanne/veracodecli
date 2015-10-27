@@ -11,6 +11,11 @@ module VeracodeApiBase
     check_environment_login_variables
     response = RestClient.get "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
   end
+
+  def get_repo_archive(directory)
+    if !Dir.exists?(directory) then `git clone #{args[1]} #{directory}` end
+    if Dir.exists?(directory) then `cd #{directory}; git pull; git archive --format=tar -o sast_upload.tar master` else fail 'Repository not found' end
+  end
 end
 
 module VeracodeApiScan

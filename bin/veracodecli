@@ -22,14 +22,14 @@ Commander.configure do
     c.action do |args,options|
       fail 'Specify application Name.' if args.first.nil?
       fail 'Specify repo location.' if args[1].nil?
-      # VeracodeApiScan.submit_scan args[0], args[1]
       options.default :business_criticality => 'High'
       options.default :business_unit => 'TELUS Digital'
-      dir = "/home/#{ENV['USER']}/veracodecli_data/sast_clone"
-      if !Dir.exists?(dir) then `git clone #{args[1]} #{dir}` end
-      if Dir.exists?(dir) then `cd #{dir}; git pull; git archive --format=tar -o sast_upload.tar master` else fail 'Repository not found' end
-      VeracodeApiMacros.submit_scan_macro args[0], options.business_criticality, options.business_unit, options.team, 'sast_clone/sast_upload.tar'
-      `cd #{dir}; rm -r sast_upload.tar`
+      directory = "/home/#{ENV['USER']}/veracodecli_data/sast_clone"
+      VeracodeApiBase.get_repo_archive directory
+      # if !Dir.exists?(dir) then `git clone #{args[1]} #{dir}` end
+      # if Dir.exists?(dir) then `cd #{dir}; git pull; git archive --format=tar -o sast_upload.tar master` else fail 'Repository not found' end
+      VeracodeApiMacros.submit_scan_macro args[0], options.business_criticality, options.business_unit, options.team, "#{directory}/sast_upload.tar"
+      `cd #{directory}; rm -r sast_upload.tar`
     end
   end
 
