@@ -8,8 +8,8 @@ class TestVeracodecli < Test::Unit::TestCase
   context 'VeracodeApi' do
 
     setup do
-      ENV['VERACODE_USERNAME'] = 'telusdigitalapi'
-      ENV['VERACODE_PASSWORD'] = 'OSJ939q4'
+      ENV['VERACODE_USERNAME'] = ''
+      ENV['VERACODE_PASSWORD'] = ''
     end
 
     should 'Return existing application profile ID' do
