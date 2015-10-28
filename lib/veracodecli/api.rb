@@ -5,7 +5,7 @@ require 'yaml'
 
 module VeracodeApiBase
   def check_environment_login_variables
-    fail 'EnvironmentError: VERACODE_USERNAME or VERACODE_PASSWORD not set in config.' unless !ENV['VERACODE_USERNAME'].nil? || !ENV['VERACODE_PASSWORD'].nil?
+    fail 'EnvironmentError: VERACODE_USERNAME or VERACODE_PASSWORD not set in config.' unless !ENV['VERACODE_USERNAME'].nil? && !ENV['VERACODE_PASSWORD'].nil?
   end
 
   def veracode_api_request(api_call, api_version: '4.0', **params)
@@ -44,7 +44,9 @@ module VeracodeApiScan
   end
 
   def create_app_profile(app_name, business_criticality, business_unit, teams)
+    fail 'Application Profile not found, creation requires the following options: --business_criticality,--business_unit,--team' unless !business_criticality.empty? && !business_unit.empty? && !teams.empty?
     create_app_response = veracode_api_request 'createapp.do', app_name: app_name, business_criticality: business_criticality, business_unit: business_unit, teams: teams
+    puts create_app_response.body
     app_id = create_app_response.body.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)[0][0]
   end
 
