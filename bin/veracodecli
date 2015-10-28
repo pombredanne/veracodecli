@@ -25,9 +25,8 @@ Commander.configure do
       options.default :business_criticality => 'High'
       options.default :business_unit => 'TELUS Digital'
       directory = "/home/#{ENV['USER']}/veracodecli_data/sast_clone"
-      VeracodeApiBase.get_repo_archive directory
-      # if !Dir.exists?(dir) then `git clone #{args[1]} #{dir}` end
-      # if Dir.exists?(dir) then `cd #{dir}; git pull; git archive --format=tar -o sast_upload.tar master` else fail 'Repository not found' end
+      VeracodeApiBase.load_config
+      VeracodeApiBase.get_repo_archive args[1], directory
       VeracodeApiMacros.submit_scan_macro args[0], options.business_criticality, options.business_unit, options.team, "#{directory}/sast_upload.tar"
       `cd #{directory}; rm -r sast_upload.tar`
     end

@@ -1,10 +1,11 @@
 require 'json'
 require 'active_support/core_ext/hash'
 require 'rest-client'
+require 'yaml'
 
 module VeracodeApiBase
   def check_environment_login_variables
-    fail 'EnvironmentError: VERACODE_USERNAME or VERACODE_PASSWORD not set.' unless !ENV['VERACODE_USERNAME'].nil? || !ENV['VERACODE_PASSWORD'].nil?
+    fail 'EnvironmentError: VERACODE_USERNAME or VERACODE_PASSWORD not set in config.' unless !ENV['VERACODE_USERNAME'].nil? || !ENV['VERACODE_PASSWORD'].nil?
   end
 
   def veracode_api_request(api_call, api_version: '4.0', **params)
@@ -12,9 +13,19 @@ module VeracodeApiBase
     response = RestClient.get "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
   end
 
-  def get_repo_archive(directory)
-    if !Dir.exists?(directory) then `git clone #{args[1]} #{directory}` end
+  def get_repo_archive(url, directory)
+    if !Dir.exists?(directory) then `git clone #{url} #{directory}` end
     if Dir.exists?(directory) then `cd #{directory}; git pull; git archive --format=tar -o sast_upload.tar master` else fail 'Repository not found' end
+  end
+
+  def load_config
+    dir = "/home/#{ENV['USER']}/veracodecli_data"
+    `mkdir #{dir}` unless Dir.exists? dir
+    fail 'ConfigError: Config File not setup. Please create config.yaml at /home/$USER/veracodecli' unless File.exist?("#{dir}/config.yaml")
+    config = YAML.load_file "#{dir}/config.yaml"
+    config.each_key do |key|
+      ENV[key] = config[key]
+    end
   end
 end
 
@@ -101,9 +112,8 @@ module VeracodeApiMacros
     app_id = get_app_id app_name
     build_id = get_most_recent_build_id app_id
     report = get_scan_report_pdf build_id
-    file = File.open "/home/#{ENV['USER']}/veracodecli_data/#{build_id}_report.pdf", 'w+'
+    file = File.open "/etc/veracodecli_data/#{build_id}_report.pdf", 'w+'
     file.write report
     file.close
   end
-
 end
