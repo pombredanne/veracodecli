@@ -2,30 +2,24 @@ require 'json'
 require 'active_support/core_ext/hash'
 require 'rest-client'
 require 'yaml'
+require_relative 'settings'
 
 module VeracodeApiBase
-  def check_environment_login_variables
-    fail 'EnvironmentError: VERACODE_USERNAME or VERACODE_PASSWORD not set in config.' unless !ENV['VERACODE_USERNAME'].nil? && !ENV['VERACODE_PASSWORD'].nil?
-  end
-
   def veracode_api_request(api_call, api_version: '4.0', **params)
-    check_environment_login_variables
-    response = RestClient.get "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
+    response = RestClient.get "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
   end
 
   def get_repo_archive(url, directory)
-    if !Dir.exists?(directory) then `git clone #{url} #{directory}` end
-    if Dir.exists?(directory) then `cd #{directory}; git pull; git archive --format=tar -o sast_upload.tar master` else fail 'Repository not found' end
+    if git_repository? directory
+      `cd #{directory}; git pull` 
+    else
+      `git clone #{url} #{directory}`
+    end
+    `cd #{directory}; cd git archive --format=tar -o sast_upload.tar master`
   end
 
-  def load_config
-    dir = "/home/#{ENV['USER']}/veracodecli_data"
-    `mkdir #{dir}` unless Dir.exists? dir
-    fail 'ConfigError: Config File not setup. Please create config.yaml at /home/$USER/veracodecli' unless File.exist?("#{dir}/config.yaml")
-    config = YAML.load_file "#{dir}/config.yaml"
-    config.each_key do |key|
-      ENV[key] = config[key]
-    end
+  def self.git_repository?(path)
+    Dir.exist? "#{path}/.git"
   end
 end
 
@@ -53,7 +47,7 @@ module VeracodeApiScan
   def upload_file(app_id, archive_path)
     # NOTE: curl must be used here because of a bug in the Veracode api. rest-client cannot be used while this bug is present.
     # NOTE: preferred code: upload_result = veracode_api_request 'uploadfile.do', app_id: app_id, file: "#{archive_path}"
-    upload_file_response = `curl --url "https://#{ENV['VERACODE_USERNAME']}:#{ENV['VERACODE_PASSWORD']}@analysiscenter.veracode.com/api/4.0/uploadfile.do" -F 'app_id=#{app_id}' -F 'file=@#{archive_path}'`
+    upload_file_response = `curl --url "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/4.0/uploadfile.do" -F 'app_id=#{app_id}' -F 'file=@#{archive_path}'`
   end
 
   def submit_prescan(app_id)

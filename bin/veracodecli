@@ -24,8 +24,7 @@ Commander.configure do
       fail 'Specify repo location.' if args[1].nil?
       options.default :business_criticality => 'High'
       options.default :business_unit => 'TELUS Digital'
-      directory = "/home/#{ENV['USER']}/veracodecli_data/sast_clone"
-      VeracodeApiBase.load_config
+      directory = "~/veracodecli_data/sast_clone"
       VeracodeApiBase.get_repo_archive args[1], directory
       VeracodeApiMacros.submit_scan_macro args[0], options.business_criticality, options.business_unit, options.team, "#{directory}/sast_upload.tar"
       `cd #{directory}; rm -r sast_upload.tar`
