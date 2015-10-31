@@ -74,7 +74,7 @@ Commander.configure do
       abort 'Please specify slack channel in config.yml' if ((!defined? Settings.slack_channel) && (options.slack_upload.eql? 'yes'))
       abort 'Please specify an app' unless options.app
       file = VeracodeApiMacros.get_pdf_macro args.first
-      Slack.send_to_slack file
+      Slack.send_to_slack file if (options.slack_upload.eql? 'yes')
     end
   end
 end
