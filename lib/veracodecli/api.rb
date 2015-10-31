@@ -6,17 +6,16 @@ require_relative 'settings'
 
 module VeracodeApiBase
   def veracode_api_request(api_call, api_version: '4.0', **params)
-    RestClient.get "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
-    # p response.body.scan(/"401 Unauthorized"/)
+    begin
+      RestClient.post "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
+    rescue
+      abort '401: Unauthorized. Veracode API call Failed, please check your veracode credentials or whitelisted IPs'
+    end
   end
 
   def get_repo_archive(url)
     directory = "/tmp/sast_clone"
     `git archive --remote #{url} --format=tar -o #{directory}/sast_upload.tar master`
-  end
-
-  def upload_to_slack(org, channel)
-
   end
 end
 

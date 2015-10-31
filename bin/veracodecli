@@ -20,11 +20,11 @@ Commander.configure do
     c.option '--business_unit STRING', String, 'Business Unit Name'
     c.option '--team STRING', String, 'Team Name'
     c.option '--business_criticality STRING', String, 'Application business criticality'
-    c.option '--app STRING', String, 'Name of the app to scan'
+    c.option '--app_name  STRING', String, 'Name of the app to scan'
     c.option '--repo STRING', String, 'The URL of application repo'
     c.action do |_,options|
       abort 'Missing parameter --repo' unless options.repo
-      abort 'Missing parameter --app' unless options.app
+      abort 'Missing parameter --app_name' unless options.app_name
       abort 'Missing parameter --business_unit' unless options.business_unit || defined? Settings.business_unit 
       abort 'Missing parameter --team' unless options.team || defined? Settings.team
       abort 'Missing parameter --business_criticality' unless options.business_criticality || defined? Settings.business_criticality
@@ -33,7 +33,7 @@ Commander.configure do
       business_unit = options.business_unit || Settings.business_unit
       team = options.team || Settings.team
       VeracodeApiBase.get_repo_archive options.repo
-      VeracodeApiMacros.submit_scan_macro options.app, business_criticality, business_unit, team
+      VeracodeApiMacros.submit_scan_macro options.app_name, business_criticality, business_unit, team
     end
   end
 
