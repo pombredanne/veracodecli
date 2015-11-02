@@ -15,6 +15,7 @@ module VeracodeApiBase
 
   def get_repo_archive(url)
     directory = "/tmp/sast_clone"
+    `git clone #{url} #{directory}/sast_clone`
     `cd /tmp; zip -r sast_upload.zip sast_clone`
     # `git archive --remote #{url} --format=tar -o #{directory}/sast_upload.tar master`
   end
