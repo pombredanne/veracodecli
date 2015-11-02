@@ -3,19 +3,27 @@ require 'active_support/core_ext/hash'
 require 'rest-client'
 require 'yaml'
 require_relative 'settings'
+require_relative 'log'
 
 module VeracodeApiBase
   def veracode_api_request(api_call, api_version: '4.0', **params)
     begin
-      RestClient.post "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
+      response = RestClient.post "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
+      log = ResponseLogger.new "/home/#{ENV['USER']/veracodecli_data}"
+      log.log response.body
     rescue
       abort '401: Unauthorized. Veracode API call Failed, please check your veracode credentials or whitelisted IPs'
     end
+    response
   end
 
   def get_repo_archive(url)
     directory = "/tmp/sast_clone"
-    `git clone #{url} #{directory}/sast_clone`
+    if Dir.exists?(directory)
+      `cd #{directory}; git pull`
+    else
+      `git clone #{url} #{directory}/sast_clone`
+    end
     `cd /tmp; zip -r sast_upload.zip sast_clone`
     # `git archive --remote #{url} --format=tar -o #{directory}/sast_upload.tar master`
   end
