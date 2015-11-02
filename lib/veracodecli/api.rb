@@ -10,7 +10,7 @@ module VeracodeApiBase
     begin
       response = RestClient.post "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
       log = ResponseLogger.new "/home/#{ENV['USER']/veracodecli_data}"
-      log.log response.body
+      log.log api_call, response.body
     rescue
       abort '401: Unauthorized. Veracode API call Failed, please check your veracode credentials or whitelisted IPs'
     end
