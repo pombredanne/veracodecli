@@ -36,7 +36,6 @@ Gem::Specification.new do |s|
     "test/API.rb",
     "test/helper.rb",
     "test/test_veracodecli.rb",
-    "veracodecli-0.2.0.gem",
     "veracodecli.gemspec"
   ]
   s.homepage = "http://github.com/isand3r/veracodecli"
