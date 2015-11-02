@@ -15,7 +15,8 @@ module VeracodeApiBase
 
   def get_repo_archive(url)
     directory = "/tmp/sast_clone"
-    `git archive --remote #{url} --format=tar -o #{directory}/sast_upload.tar master`
+    `cd /tmp; zip -r sast_upload.zip sast_clone`
+    # `git archive --remote #{url} --format=tar -o #{directory}/sast_upload.tar master`
   end
 end
 
@@ -88,7 +89,7 @@ module VeracodeApiMacros
   include VeracodeApiResults
 
   def submit_scan_macro(app_name, business_criticality, business_unit, team)
-    archive_path = "/tmp/sast_clone/sast_upload.tar"
+    archive_path = "/tmp/sast_upload.zip"
     app_id = get_app_id(app_name)
     if app_id.nil?
       app_id = create_app_profile(app_name, business_criticality, business_unit, team)
