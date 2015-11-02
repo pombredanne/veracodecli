@@ -6,7 +6,7 @@
 
 Gem::Specification.new do |s|
   s.name = "veracodecli"
-  s.version = "0.1.1"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
@@ -31,6 +31,8 @@ Gem::Specification.new do |s|
     "bin/veracodecli",
     "lib/veracodecli.rb",
     "lib/veracodecli/api.rb",
+    "lib/veracodecli/settings.rb"
+    "lib/veracodecli/slack.rb"
     "test/API.rb",
     "test/helper.rb",
     "test/test_veracodecli.rb",
@@ -97,4 +99,3 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<yard>, ["~> 0.7"])
   end
 end
-
