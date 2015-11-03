@@ -6,9 +6,10 @@ class ResponseLogger
     @path = log_path
   end
 
-  def log(call, response)
+  def log(call, code, response)
     log = File.open "#{@path}/veracodecli.log", 'a+'
     log.write "#{call} called @ #{timestamp}"
+    log.write "HTTP #{code}"
     log.write response
     log.write "\n"
     log.close

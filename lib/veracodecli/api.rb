@@ -10,7 +10,7 @@ module VeracodeApiBase
     begin
       response = RestClient.post "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
       log = ResponseLogger.new "/home/#{ENV['USER']/veracodecli_data}"
-      log.log api_call, response.body
+      log.log api_call, response.code, response.body
     rescue
       abort '401: Unauthorized. Veracode API call Failed, please check your veracode credentials or whitelisted IPs'
     end
@@ -45,7 +45,12 @@ module VeracodeApiScan
 
   def create_app_profile(app_name, business_criticality, business_unit, team)
     create_app_response = veracode_api_request 'createapp.do', app_name: app_name, business_criticality: business_criticality, business_unit: business_unit, teams: team
-    create_app_response.body.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)[0][0]
+    app_id = create_app_response.body.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)
+    if app_id.emtpy?
+      fail 'createapp failed. Make sure you have supplied the correct parameters.'
+    else
+      app_id[0][0]
+    end
   end
 
   def upload_file(app_id, archive_path)
