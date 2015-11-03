@@ -22,7 +22,7 @@ module VeracodeApiBase
     if Dir.exists?(directory)
       `cd #{directory}; git pull`
     else
-      `git clone #{url} #{directory}/sast_clone`
+      `git clone #{url} #{directory}`
     end
     `cd /tmp; zip -r sast_upload.zip sast_clone`
     # `git archive --remote #{url} --format=tar -o #{directory}/sast_upload.tar master`
