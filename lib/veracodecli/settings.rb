@@ -14,7 +14,7 @@ class Settings < Settingslogic
 
   load!
 rescue Errno::ENOENT
-  Announce.failure "Unable to find a configuration at #{config_path}/veracodecli.yml"
+  Announce.failure "Unable to find a configuration at #{config_path}/veracodecli.yaml"
   exit
   # InteractiveSetup.start
 end

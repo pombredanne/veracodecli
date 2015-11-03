@@ -8,12 +8,13 @@ require_relative 'log'
 module VeracodeApiBase
   def veracode_api_request(api_call, api_version: '4.0', **params)
     begin
-      response = RestClient.post "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
+      response = RestClient.get "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
       log = ResponseLogger.new "/home/#{ENV['USER']/veracodecli_data}"
       log.log api_call, response.code, response.body
     rescue
       abort '401: Unauthorized. Veracode API call Failed, please check your veracode credentials or whitelisted IPs'
     end
+    if [500,501,502,503].any?{|code| response.code == code} then abort 'Internal server error.' end
     response
   end
 
@@ -25,7 +26,6 @@ module VeracodeApiBase
       `git clone #{url} #{directory}`
     end
     `cd /tmp; zip -r sast_upload.zip sast_clone`
-    # `git archive --remote #{url} --format=tar -o #{directory}/sast_upload.tar master`
   end
 end
 
@@ -35,21 +35,20 @@ module VeracodeApiScan
   def get_app_id(app_name)
     app_list = veracode_api_request 'getapplist.do', include_user_info: 'true'
     scan = app_list.body.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)
-    begin
+    if scan.empty?
       app_id = scan[0][0]
-    rescue
+    else
       app_id = nil
     end
-    app_id
   end
 
   def create_app_profile(app_name, business_criticality, business_unit, team)
     create_app_response = veracode_api_request 'createapp.do', app_name: app_name, business_criticality: business_criticality, business_unit: business_unit, teams: team
-    app_id = create_app_response.body.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)
-    if app_id.emtpy?
+    scan = create_app_response.body.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)
+    if scan.empty?
       fail 'createapp failed. Make sure you have supplied the correct parameters.'
     else
-      app_id[0][0]
+      app_id = scan[0][0]
     end
   end
 
