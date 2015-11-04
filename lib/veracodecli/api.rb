@@ -121,8 +121,10 @@ module VeracodeApiMacros
     if app_id.nil?
       app_id = create_app_profile(app_name, business_criticality, business_unit, team)
     end
-    upload_file app_id, archive_path
+    upload = upload_file app_id, archive_path
+    ResponseLogger.new.log upload
     submit_prescan app_id
+    File.delete archive_path
   end
 
   def get_report_macro(app_name)
