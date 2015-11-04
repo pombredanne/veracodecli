@@ -3,10 +3,12 @@
 require 'commander'
 require 'veracodecli'
 require_relative '../lib/veracodecli/settings'
+require_relative '../lib/veracodecli/slack'
 include VeracodeApiResults
 include VeracodeApiScan
 include VeracodeApiBase
 include VeracodeApiMacros
+include Slack
 
 Commander.configure do
   program :name, 'veracodecli'
@@ -66,13 +68,13 @@ Commander.configure do
 
   command :get_pdf_report do |c|
     c.syntax = 'veracodecli get_pdf_report [app_name] --option [option]'
-    c.option '--app STRING', String, 'Upload report to slack?'
+    # c.option '--app STRING', String, 'Upload report to slack?'
     c.option '--slack_upload STRING', String, 'Upload report to slack?'
     c.description = 'Downloads the final scan report in pdf format.'
     c.action do |args, options|
       abort 'Please specify slack token in config.yml' if ((!defined? Settings.slack_token) && (options.slack_upload.eql? 'yes'))
       abort 'Please specify slack channel in config.yml' if ((!defined? Settings.slack_channel) && (options.slack_upload.eql? 'yes'))
-      abort 'Please specify an app' unless options.app
+      # abort 'Please specify an app' unless options.app
       file = VeracodeApiMacros.get_pdf_macro args.first
       Slack.send_to_slack file if (options.slack_upload.eql? 'yes')
     end
