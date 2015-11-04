@@ -25,10 +25,10 @@ Commander.configure do
     c.action do |_,options|
       abort 'Missing parameter --repo' unless options.repo
       abort 'Missing parameter --app_name' unless options.app_name
-      abort 'Missing parameter --business_unit' unless options.business_unit || defined? Settings.business_unit 
+      abort 'Missing parameter --business_unit' unless options.business_unit || defined? Settings.business_unit
       abort 'Missing parameter --team' unless options.team || defined? Settings.team
       abort 'Missing parameter --business_criticality' unless options.business_criticality || defined? Settings.business_criticality
-
+      options.app_name.gsub! /[-_]/, ''
       business_criticality = options.business_criticality || Settings.business_criticality
       business_unit = options.business_unit || Settings.business_unit
       team = options.team || Settings.team

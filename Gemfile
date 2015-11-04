@@ -6,6 +6,7 @@ gem 'json', '~> 1.8'
 gem 'rest-client', '~> 1.8'
 gem 'settingslogic', '~> 2.0'
 gem 'terminal-announce', '~> 1.0'
+gem 'nokogiri', '~> 1.6'
 
 group :development do
   gem "bundler", "~> 1.0"

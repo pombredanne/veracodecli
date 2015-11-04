@@ -35,7 +35,7 @@ module VeracodeApiBase
     doc.remove_namespaces!
     if doc.xpath('//app').empty? then return nil end
     doc.xpath('//app').each do |app|
-      if app.attributes['app_name'].value == app_name then app_id = app.attributes['app_id'].value end
+      app_id = app.attributes['app_id'].value unless app.attributes['app_name'].value != app_name
     end
     app_id
   end
