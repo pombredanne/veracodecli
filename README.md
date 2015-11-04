@@ -26,6 +26,8 @@ gem install veracodecli
 - `veracodecli help` to see commands
 - `veracodecli [command] -h` to see command syntax
 
+(append `--trace` to the end to see a stack trace if you are encountering errors.)
+
 ## Roadmap
 Ideas for future development.
 
