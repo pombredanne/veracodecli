@@ -129,6 +129,7 @@ DEPENDENCIES
   commander (~> 4.3)
   jeweler (~> 2.0)
   json (~> 1.8)
+  nokogiri (~> 1.6)
   rdoc (~> 3.12)
   reek (~> 1.2)
   rest-client (~> 1.8)
