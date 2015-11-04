@@ -2,6 +2,7 @@ require 'json'
 require 'active_support/core_ext/hash'
 require 'rest-client'
 require 'yaml'
+require 'nokogiri'
 require_relative 'settings'
 require_relative 'log'
 
@@ -9,9 +10,9 @@ module VeracodeApiBase
   def veracode_api_request(api_call, api_version: '4.0', **params)
     begin
       response = RestClient.get "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
-      log = ResponseLogger.new "/home/#{ENV['USER']/veracodecli_data}"
+      log = ResponseLogger.new "/tmp"
       log.log api_call, response.code, response.body
-    rescue
+    rescue RestClient
       abort '401: Unauthorized. Veracode API call Failed, please check your veracode credentials or whitelisted IPs'
     end
     if [500,501,502,503].any?{|code| response.code == code} then abort 'Internal server error.' end
@@ -27,6 +28,28 @@ module VeracodeApiBase
     end
     `cd /tmp; zip -r sast_upload.zip sast_clone`
   end
+
+  def response_parse_app_id(response, app_name)
+    app_id = nil
+    doc = Nokogiri::XML response
+    doc.remove_namespaces!
+    if doc.xpath('//app').empty? then return nil end
+    doc.xpath('//app').each do |app|
+      if app.attributes['app_name'].value == app_name then app_id = app.attributes['app_id'].value end
+    end
+    app_id
+  end
+
+  def parse_new_app_id(response)
+    app_id = nil
+    doc = Nokogiri::XML response
+    doc.remove_namespaces!
+    if doc.xpath('//application').empty? then return nil end
+    doc.xpath('//application').each do |application|
+      app_id = application.attributes['app_id'].value
+    end
+    app_id
+  end
 end
 
 module VeracodeApiScan
@@ -34,22 +57,13 @@ module VeracodeApiScan
 
   def get_app_id(app_name)
     app_list = veracode_api_request 'getapplist.do', include_user_info: 'true'
-    scan = app_list.body.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)
-    if scan.empty?
-      app_id = scan[0][0]
-    else
-      app_id = nil
-    end
+    app_id = response_parse_app_id app_list.body, app_name
   end
 
   def create_app_profile(app_name, business_criticality, business_unit, team)
     create_app_response = veracode_api_request 'createapp.do', app_name: app_name, business_criticality: business_criticality, business_unit: business_unit, teams: team
-    scan = create_app_response.body.scan(/app_id=\"(.+)\" app_name=\"#{app_name}\"/)
-    if scan.empty?
-      fail 'createapp failed. Make sure you have supplied the correct parameters.'
-    else
-      app_id = scan[0][0]
-    end
+    app_id = parse_new_app_id create_app_response.body
+    if app_id.nil? then abort 'createapp failed. Check the logs.' end
   end
 
   def upload_file(app_id, archive_path)
