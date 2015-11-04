@@ -21,7 +21,7 @@ gem install veracodecli
 ## Usage
 
 1. set appropriate configs in `/etc/veracodecli.yml`. The only two that are _required_ are `veracode_username` and `veracode_password` that are your API credentials for veracode
-2. To run a scan use `veracodecli scan` --app_name _app\_name_ --repo _repo\_url_
+2. To run a scan use `veracodecli scan` _app\_name_ --repo _repo\_url_
 
 - `veracodecli help` to see commands
 - `veracodecli [command] -h` to see command syntax
