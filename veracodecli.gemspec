@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["isaiah thiessen"]
-  s.date = "2015-11-04"
+  s.date = "2015-11-05"
   s.description = "Ruby based CLI for accessing veracode's api"
   s.email = "isaiah.thiessen@telus.com"
   s.executables = ["veracodecli"]
