@@ -122,7 +122,7 @@ module VeracodeApiMacros
       app_id = create_app_profile(app_name, business_criticality, business_unit, team)
     end
     upload = upload_file app_id, archive_path
-    ResponseLogger.new('/tmp').log 'uploadfile.do', upload.code upload.body
+    ResponseLogger.new('/tmp').log 'uploadfile.do', upload.code, upload.body
     submit_prescan app_id
     File.delete archive_path
   end
