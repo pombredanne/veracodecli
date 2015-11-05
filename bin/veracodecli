@@ -71,14 +71,12 @@ Commander.configure do
 
   command :get_pdf_report do |c|
     c.syntax = 'veracodecli get_pdf_report --app_name [app_name] --option [option]'
-    # c.option '--app STRING', String, 'Upload report to slack?'
     c.option '--slack_upload STRING', String, 'Upload report to slack?'
     c.description = 'Downloads the final scan report in pdf format.'
     c.action do |args, options|
       abort 'Missing parameter --app_name' unless options.app_name
       abort 'Please specify slack token in config.yml' if ((!defined? Settings.slack_token) && (options.slack_upload.eql? 'yes'))
       abort 'Please specify slack channel in config.yml' if ((!defined? Settings.slack_channel) && (options.slack_upload.eql? 'yes'))
-      # abort 'Please specify an app' unless options.app
       file = VeracodeApiMacros.get_pdf_macro options.app_name
       Slack.send_to_slack file if (options.slack_upload.eql? 'yes')
     end
