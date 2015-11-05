@@ -12,12 +12,12 @@ include Slack
 
 Commander.configure do
   program :name, 'veracodecli'
-  program :version, '0.1.2'
+  program :version, '1.0.14'
   program :description, 'CLI for automating veracode api requests'
   program :help, 'Author', 'Isaiah Thiessen <isaiah.thiessen@telus.com>'
 
   command :scan do |c|
-    c.syntax = 'veracodecli scan [app_name] [repo] --option [option]'
+    c.syntax = 'veracodecli scan --app_name [app_name] --repo [repo] --option [option]'
     c.description = 'Submits a scan to Veracode.'
     c.option '--business_unit STRING', String, 'Business Unit Name'
     c.option '--team STRING', String, 'Team Name'
@@ -67,15 +67,16 @@ Commander.configure do
   end
 
   command :get_pdf_report do |c|
-    c.syntax = 'veracodecli get_pdf_report [app_name] --option [option]'
+    c.syntax = 'veracodecli get_pdf_report --app_name [app_name] --option [option]'
     # c.option '--app STRING', String, 'Upload report to slack?'
     c.option '--slack_upload STRING', String, 'Upload report to slack?'
     c.description = 'Downloads the final scan report in pdf format.'
     c.action do |args, options|
+      abort 'Missing parameter --app_name' unless options.app_name
       abort 'Please specify slack token in config.yml' if ((!defined? Settings.slack_token) && (options.slack_upload.eql? 'yes'))
       abort 'Please specify slack channel in config.yml' if ((!defined? Settings.slack_channel) && (options.slack_upload.eql? 'yes'))
       # abort 'Please specify an app' unless options.app
-      file = VeracodeApiMacros.get_pdf_macro args.first
+      file = VeracodeApiMacros.get_pdf_macro options.app_name
       Slack.send_to_slack file if (options.slack_upload.eql? 'yes')
     end
   end
