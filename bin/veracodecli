@@ -72,6 +72,7 @@ Commander.configure do
   command :get_pdf_report do |c|
     c.syntax = 'veracodecli get_pdf_report --app_name [app_name] --option [option]'
     c.option '--slack_upload STRING', String, 'Upload report to slack?'
+    c.option '--app_name STRING', String, 'Application Name'
     c.description = 'Downloads the final scan report in pdf format.'
     c.action do |args, options|
       abort 'Missing parameter --app_name' unless options.app_name
