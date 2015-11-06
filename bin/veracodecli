@@ -65,6 +65,7 @@ Commander.configure do
     c.option '--app_name STRING', String, 'Application name'
     c.action do |args,options|
       fail 'Specify app_name.' unless options.app_name
+      options.app_name.gsub! /[-_]/, ''
       VeracodeApiMacros.get_report_macro options.app_name
     end
   end
@@ -78,6 +79,7 @@ Commander.configure do
       abort 'Missing parameter --app_name' unless options.app_name
       abort 'Please specify slack token in config.yml' if ((!defined? Settings.slack_token) && (options.slack_upload.eql? 'yes'))
       abort 'Please specify slack channel in config.yml' if ((!defined? Settings.slack_channel) && (options.slack_upload.eql? 'yes'))
+      options.app_name.gsub! /[-_]/, ''
       file = VeracodeApiMacros.get_pdf_macro options.app_name
       Slack.send_to_slack file if (options.slack_upload.eql? 'yes')
     end

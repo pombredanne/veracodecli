@@ -8,8 +8,6 @@ class TestVeracodecli < Test::Unit::TestCase
   context 'VeracodeApi' do
 
     setup do
-      ENV['VERACODE_USERNAME'] = ''
-      ENV['VERACODE_PASSWORD'] = ''
       @test_file_location = '' # a .tar or .zip archive path
     end
 
