@@ -9,7 +9,7 @@ require_relative 'log'
 module VeracodeApiBase
   def veracode_api_request(api_call, api_version: '4.0', **params)
     begin
-      RestClient.proxy = Settings.proxy unless !Settings.proxy
+      # RestClient.proxy = Settings.proxy unless !Settings.proxy
       response = RestClient.get "https://#{Settings.veracode_username}:#{Settings.veracode_password}@analysiscenter.veracode.com/api/#{api_version}/#{api_call}", { params: params }
       log = ResponseLogger.new "/tmp"
       log.log api_call, response.code, response.body
