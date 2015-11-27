@@ -1,3 +1,5 @@
+Support for this gem will soon be dropped in favour of https://github.com/isand3r/apidragon
+
 # veracodecli
 
 [![Code Climate](https://codeclimate.com/github/isand3r/veracodecli/badges/gpa.svg)](https://codeclimate.com/github/isand3r/veracodecli)
