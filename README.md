@@ -30,11 +30,6 @@ gem install veracodecli
 
 (append `--trace` to the end to see a stack trace if you are encountering errors.)
 
-## Roadmap
-Ideas for future development.
-
-* Config file: Make this cli scanner/tool agnostic. Should work with rest api services from other tools
-
 ## License
 
 [MIT](https://tldrlegal.com/license/mit-license)
