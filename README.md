@@ -10,7 +10,6 @@ A ruby cli gem for interacting with the veracode API
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Roadmap](#roadmap)
 - [License](#license)
 - [Contributors](#contributors)
 
