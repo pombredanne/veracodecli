@@ -82,6 +82,7 @@ Commander.configure do
       options.app_name.gsub! /[-_]/, ''
       file = VeracodeApiMacros.get_pdf_macro options.app_name
       Slack.send_to_slack file if (options.slack_upload.eql? 'yes')
+      File.delete file
     end
   end
 end

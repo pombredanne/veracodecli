@@ -2,12 +2,13 @@ require 'json'
 
 class ResponseLogger
 
+  # Logger initialization, records the desired log file path.
   def initialize(log_path)
     @path = log_path
   end
 
+  # writes the following information for the passed response string: date & time the call was made, body (response), call name (call), HTTP response code (code). 
   def log(call, code, response)
-    check_log_file "#{@path}/veracodecli.log"
     log = File.open "#{@path}/veracodecli.log", 'a+'
     log.write "#{call} called @ #{timestamp}"
     log.write "HTTP #{code}\n"
@@ -16,10 +17,7 @@ class ResponseLogger
     log.close
   end
 
-  def check_log_file(file_path)
-    File.open file_path, 'w' unless File.exist? file_path
-  end
-
+  # Returns current system date & time.
   def timestamp
     `date`
   end
