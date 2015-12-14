@@ -1,3 +1,5 @@
+Support for this gem will soon be dropped in favour of https://github.com/isand3r/apidragon
+
 # veracodecli
 
 [![Code Climate](https://codeclimate.com/github/isand3r/veracodecli/badges/gpa.svg)](https://codeclimate.com/github/isand3r/veracodecli)
@@ -8,7 +10,6 @@ A ruby cli gem for interacting with the veracode API
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Roadmap](#roadmap)
 - [License](#license)
 - [Contributors](#contributors)
 
@@ -27,11 +28,6 @@ gem install veracodecli
 - `veracodecli [command] -h` to see command syntax
 
 (append `--trace` to the end to see a stack trace if you are encountering errors.)
-
-## Roadmap
-Ideas for future development.
-
-* Config file: Make this cli scanner/tool agnostic. Should work with rest api services from other tools
 
 ## License
 
